@@ -1,7 +1,7 @@
 """Model holding helper functions"""
 # third party import
 import re
-class Utils:
+class UserUtils:
     """A class holding helper functions"""
     def __init__(self):
         """class constructor"""
@@ -10,6 +10,7 @@ class Utils:
         """Check user crednetials for anomalies before registration"""
         if isinstance(credentials, dict) is False:
             return "credentials are dictionaries.Try using application/json!"
+        self.user_credentials = credentials
         if not self.user_credentials:
             return "Enter data for the server to process!"
         if len(self.user_credentials) != 4:
