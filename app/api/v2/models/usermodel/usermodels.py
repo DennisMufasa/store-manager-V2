@@ -2,31 +2,8 @@
 # third-party import
 import psycopg2
 # local import
-from .utils import Utils
-
-class Database:
-    """Configure a database conncetion"""
-    def __init__(self):
-        """class constructor"""
-        self.role = "postgres"
-        self.password = "mufasa"
-        self.host = "127.0.0.1"
-        self.port = "5432"
-        self.database = "storemanager"
-    def connection(self):
-        """Make a conncetion to storemanager db"""
-        try:
-            con = psycopg2.connect(
-                user=self.role,
-                password=self.password,
-                host=self.host,
-                port=self.port,
-                database=self.database
-            )
-            return con
-        except (Exception, psycopg2.DatabaseError) as error:
-            print("Database Error", error)
-
+from ..utils import UserUtils
+from ..utils import Database
 
 class User(Database):
     """A user model that inherits a database configuration class"""
@@ -35,7 +12,7 @@ class User(Database):
         Database.__init__(self) # instantiate the inherited class
     def add_user(self, credentials):
         """Add a new user to database"""
-        inspect_credentials = Utils()
+        inspect_credentials = UserUtils()
         if inspect_credentials.inspect_user_credentials(credentials) == "Details are ok!":
             username = credentials["username"]
             password = credentials["password"]

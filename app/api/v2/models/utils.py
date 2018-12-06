@@ -1,6 +1,32 @@
 """Model holding helper functions"""
 # third party import
 import re
+import psycopg2
+
+class Database:
+    """Configure a database conncetion"""
+    def __init__(self):
+        """class constructor"""
+        self.role = "postgres"
+        self.password = "mufasa"
+        self.host = "127.0.0.1"
+        self.port = "5432"
+        self.database = "storemanager"
+    def connection(self):
+        """Make a conncetion to storemanager db"""
+        try:
+            con = psycopg2.connect(
+                user=self.role,
+                password=self.password,
+                host=self.host,
+                port=self.port,
+                database=self.database
+            )
+            return con
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Database Error", error)
+
+
 class UserUtils:
     """A class holding helper functions"""
     def __init__(self):
