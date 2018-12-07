@@ -53,9 +53,20 @@ class ProductUtils:
                 category = ["furniture", "electronics", "sports", "accessories"]
                 if self.product_details["product_category"] not in category:
                         return "That product is not sold here!"
+                # make sure the store has at least 10 items 
+                if product_details["quantity"] < 10:
+                        return "Store requires at least 10 items!"
                 if isinstance(product_details["quantity"], int) is False:
                         return "Use numbers for quantity!"
                 if isinstance(product_details["unit_ccost"], int) is False:
                         return "Use numebers for unit_cost!"
                 return "Details are ok!"
+        def check_ids(self, productId):
+                """check ids"""
+                if isinstance(productId, int) is False:
+                        return "Make sure productId is a number!"
+                elif productId < 1:
+                        return "Id 0 doesn't exist!"
+                else:
+                        return "Id is ok!"
                 
