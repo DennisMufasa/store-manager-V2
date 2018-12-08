@@ -41,14 +41,15 @@ class UserUtils:
             return "Enter data for the server to process!"
         if len(self.user_credentials) != 4:
             return "Ensure attendant details include their email, username, password, role"
-        if self.user_credentials["username"] == "":
-            return "Username cannot be empty!"
-        if self.user_credentials["email"] == "":
-            return "Email cannot be empty!"
-        if self.user_credentials["password"] == "":
-            return "Password cannot be empty!"
-        if self.user_credentials["role"] == "":
-            return "Role cannot be empty!"
+        # check whether data has all required fields
+        fields = ["username", "email", "password", "role"]
+        for i in range(len(fields)):
+            if fields[i] not in self.user_credentials.keys():
+                return "Ensure to include {}".format(fields[i])
+        # check for empty strings
+        for item in self.user_credentials:
+            if self.user_credentials[item] == "" or self.user_credentials[item] == " ":
+                return "Ensure to enter sensible user data!"
         if  bool(re.search(r'@', self.user_credentials["email"])) is False:
             return "Your email should have an @ somewhere!"
         if self.user_credentials["role"]!="admin" and self.user_credentials["role"] != "attendant":
