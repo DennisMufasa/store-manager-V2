@@ -5,6 +5,7 @@ import psycopg2
 from ..utils import UserUtils
 from ..utils import Database
 
+
 class User(Database):
     """A user model that inherits a database configuration class"""
     def __init__(self):
@@ -26,7 +27,7 @@ class User(Database):
                 cursor.execute(query)
                 con.commit
                 return "New user added!"
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
@@ -40,14 +41,14 @@ class User(Database):
             try:
                 con = self.connection()
                 cursor = con.cursor()
-                query = """SELECT * FROM users WHERE userId = {}""".format(userId)
+                query = """SELECT * FROM users WHERE userId = {};""".format(userId)
                 cursor.execute(query)
                 resultset = cursor.fetchone()
                 if not resultset:
                     return """That id is not registered to any user"""
                 return """username  : {},
                             email   : {}""".format(resultset[1], resultset[2])
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
@@ -72,10 +73,27 @@ class User(Database):
                             resultset[2],
                             resultset[0]
                         )
-        except(Exception, psycopg2.DatabaseError) as error:
+        except(Exception, psycopg2.Error) as error:
             print("Database Error", error)
         finally:
             if con:
                 cursor.close()
                 con.close()
                 print("Conncetion Closed!")
+    def delete_user(self, userId):
+        """Removing a user"""
+        if UserUtils().check_userIds(userId) == "Id is ok!":
+            try:
+                con = self.connection()
+                cursor = con.cursor()
+                query = """DELETE FROM users WHERE user_id = {};""".format(userId)
+                cursor.execute(query)
+                con.commit()
+                return "User deleted!"
+            except(Exception, psycopg2.Error) as error:
+                print("Database error", error)
+            finally:
+                if con:
+                    cursor.close()
+                    con.close()
+                    print("Connection Closed!")
