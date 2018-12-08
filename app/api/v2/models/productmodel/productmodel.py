@@ -29,7 +29,7 @@ class Product(Database):
                 cursor.execute(query)
                 con.commit()
                 return "New product added!"
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
@@ -54,7 +54,7 @@ class Product(Database):
                             unit cost        : {}""".format(
                                 resultset[0], resultset[1], resultset[2], resultset[4]
                             )
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
@@ -73,7 +73,7 @@ class Product(Database):
                 return "No products in Inventory"
             for result in resultset:
                 print(result)
-        except(Exception, psycopg2.DatabaseError) as error:
+        except(Exception, psycopg2.Error) as error:
             print("Database Error", error)
         finally:
             if con:
@@ -94,7 +94,7 @@ class Product(Database):
                 cursor.execute(query)
                 con.commit()
                 return "{} items added!".format(value)
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
@@ -112,7 +112,7 @@ class Product(Database):
                 cursor.execute(query)
                 con.commit()
                 return "Data successfully deleted!"
-            except(Exception, psycopg2.DatabaseError) as error:
+            except(Exception, psycopg2.Error) as error:
                 print("Database Error", error)
             finally:
                 if con:
