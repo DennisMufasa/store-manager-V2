@@ -56,3 +56,11 @@ class UserUtils:
         if len(self.user_credentials["password"]) < 6:
             return "Password too short! make it at least 6 chars log."
         return "Details are ok!"
+    def check_userIds(self, userId):
+        """Check user ids"""
+        if isinstance(userId, int) is False:
+            return "Make sure userId is a number!"
+        elif userId < 1:
+            return "0 is not a valid id!"
+        else:
+            return "Id is ok!"
