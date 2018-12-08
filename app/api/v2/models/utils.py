@@ -42,12 +42,12 @@ class ProductUtils:
                         return "Ensure product details include name, category, quantity and unit cost"
                 # ensure the 5 items are the ones required to store in db
                 options = ["product_name", "product_category", "quantity", "unit_cost"]
-                for i in range(len(self.product_details)):
+                for i in range(len(options)):
                         if options[i] not in self.product_details.keys():
                                 return "Ensure to enter {}!".format(options[i])
                 # check whether dictionary items are empty strings
                 for item in self.product_details:
-                        if self.product_details[item] == "" or self.product_details == " ":
+                        if self.product_details[item] == "" or self.product_details[item] == " ":
                                 return "Data fields e.g product name cannot be empty!"
                 # check whether product category is sold by the store
                 category = ["furniture", "electronics", "sports", "accessories"]
