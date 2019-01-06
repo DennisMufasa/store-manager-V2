@@ -69,4 +69,39 @@ class ProductUtils:
                         return "Id 0 doesn't exist!"
                 else:
                         return "Id is ok!"
-                
+
+
+class SalesUtils:
+        """A model holding sales model helper functions"""
+        def __init__(self):
+                """class constructor"""
+                self.sale_details = dict()
+        def inspect_sale_details(self, sale_details):
+                """A method to check sale details before purchase"""
+                # check datatype of sales details
+                if isinstance(sale_details, dict) is False:
+                        return "credentials are dictionaries.Try using application/json!"
+                self.sale_details = sale_details
+                # check if any data is entered
+                if not self.sale_details:
+                        return "Enter data for the server to process!"
+                # ensure the required fields are present
+                if len(self.sale_details) != 4:
+                        return "Ensure Sale details include attendant, product name, quantity and bill!"
+                options = ["attendant", "product", "quantity", "bill"]
+                for i in range(len(options)):
+                        if options[i] not in self.sale_details.keys():
+                                return "Ensure to include {}".format(options[i])
+                # check for empty and null entries
+                for item in self.sale_details:
+                        if self.sale_details[item] == "" or self.sale_details[item] == " ":
+                                return "Ensure the data fields i.e product are not empty or null!"
+                return "Details are ok!"
+        def check_id(self, saleId):
+                """Inspect sale ids before quering database"""
+                if isinstance(saleId, int) is False:
+                        return "Ensure sale id is a number!"
+                elif saleId < 1:
+                        return "Id 0 doesn't exist!"
+                else:
+                        return "Id is ok!"
