@@ -4,13 +4,15 @@ import psycopg2
 # local imports
 from ..utils import Database
 from ..utils import SalesUtils
+from ..productmodel.productmodel import Product
 
 
-class Sale(Database):
+class Sale(Product, Database):
     """A class to manipulate sales"""
     def __init__(self):
         """Class constructor"""
-        Database.__init__(self) # initialize the database as a class object(self)
+        Product.__init__(self)  # initialize the product class as a sale class object(self)
+        Database.__init__(self) # initialize the database as a sale class object(self)
     def create_sale(self, sale_details):
         """A method that adds sales to database"""
         if SalesUtils().inspect_sale_details(sale_details) == "Details are ok!":
@@ -18,24 +20,27 @@ class Sale(Database):
             product = sale_details["product"]
             quantity = sale_details["quantity"]
             bill = sale_details["bill"]
-            try:
-                con = self.connection()
-                cursor = con.cursor()
-                query = """INSERT INTO sales (attendant, product, quantity, salecost)
-                                        VALUES({}, {}, {}, {});""".format(
-                                            attendant, product, quantity, bill)
-                cursor.execute(query)
-                con.commit()
-                return "New sale made successfully!"
-            except(Exception, psycopg2.Error) as error:
-                print("Something went wrong!", error)
-            finally:
-                """Close the database connection"""
-                if con:
-                    """close database connection"""
-                    cursor.close()
-                    con.close()
-                    print("Connection closed!")
+            #Check if item is available for sale
+            if self.fetch_product_tosell(product) == "Product available for sale!":
+                try:
+                    con = self.connection()
+                    cursor = con.cursor()
+                    query = """INSERT INTO sales (attendant, product, quantity, salecost)
+                                            VALUES({}, {}, {}, {});""".format(
+                                                attendant, product, quantity, bill)
+                    cursor.execute(query)
+                    con.commit()
+                    return "New sale made successfully!"
+                except(Exception, psycopg2.Error) as error:
+                    print("Something went wrong!", error)
+                finally:
+                    """Close the database connection"""
+                    if con:
+                        """close database connection"""
+                        cursor.close()
+                        con.close()
+                        print("Connection closed!")
+            return self.fetch_product_tosell(product)
         return SalesUtils().inspect_sale_details(sale_details)
     def get_sales(self):
         """A method to fetch all sales"""

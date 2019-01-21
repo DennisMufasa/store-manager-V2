@@ -120,4 +120,26 @@ class Product(Database):
                     con.close()
                     print("Connection Closed!")
         return ProductUtils().check_ids(productId)
-        
+    def fetch_product_tosell(self, productName):
+        """A method to check whether items to sell are available in inventory"""
+        try:
+            con = self.connection()
+            cursor = con.cursor()
+            query = """SELECT * FROM inventory WHERE productname = {};""".format(
+                productName
+            )
+            cursor.execute(query)
+            resultset = cursor.fetchone()
+            if not resultset:
+                return "That product is not available in the store!"
+            elif resultset[3] <= 5:
+                return "Purchase not allowed. Insufficient Products!"
+            else:
+                return "Product available for sale!"
+        except(Exception, psycopg2.Error) as error:
+            print("Something went wrong!", error)
+        finally:
+            if con:
+                cursor.close()
+                con.close()
+                print("Connection closed!")
